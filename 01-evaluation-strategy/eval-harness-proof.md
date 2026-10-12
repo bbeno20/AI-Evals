@@ -34,7 +34,3 @@ Edge cases: short but drops a deadline = bad. Accurate but buries the blocker = 
 Changes to the LLM's labels: flipped row 8 to bad (dropped the "confirm address, then ship" action item). Dropped row 20 (duplicate of row 6). Added 3 rows for subtle failures the generated set missed: a summary that softens churn going 3% to 5% into "ticked up slightly," a clean version of the same summary, and one that rounds 23.6% to "roughly 25%."
 
 ## Screenshots, links or repo paths (optional if you followed the demo)
-
-01-evaluation-strategy/screenshots/eval-setup.png
-01-evaluation-strategy/screenshots/starter-rows.png
-
