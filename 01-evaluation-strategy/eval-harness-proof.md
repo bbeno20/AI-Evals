@@ -1,29 +1,40 @@
 # First LLM-as-a-Judge Eval, Module 1
 
-> Repo file `ai-evals/01-evaluation-strategy/eval-harness-proof.md`. The eval evidence behind the **Eval Results** slide of the final pitch deck (Module 6).
->
-> Fill this with the **First Eval Lab** builder, then **Copy markdown** and paste it over this file. The headings below mirror the tool's output exactly.
-
 ## Version A, Concise, system prompt used
 
-_…_
+You are an executive briefing assistant.
+Summarize in exactly 3 bullet points under 60 words. No preamble, no extra text.
 
 ## Version B, Narrative, system prompt used
 
-_…_
+You are a PR communications assistant.
+Write a 100-word narrative summary highlighting wins first, then risks and next steps. Keep a positive tone. No bullets.
 
 ## Eval setup, dataset name + judge model/family
 
-_e.g. dataset `Module1Output`, Conciseness LLM-as-a-Judge, judge from a different model family than the generator (avoids self-preference bias)._
+Dataset: Module1Output (Output A, Output B, plus the cold-start starter rows). Evaluator: Conciseness LLM-as-a-Judge, binary (1 = concise and faithful, 0 = not). Generator: Claude (Anthropic). Judge: ChatGPT (OpenAI), a different model family to avoid self-preference bias. Result: A = 1 (concise, faithful, all key facts and deadlines kept). B = 0 (padded, added unsupported claims like "real momentum" and "strong signal that the refreshed strategy is landing").
 
 ## Cold-start, the prompt you used to seed a starter dataset
 
-_Paste the prompt you gave ChatGPT to generate ~20 example rows._
+Generate 20 example rows for evaluating email-summary quality.
+Each row: an input email + a candidate summary + a first-pass label ("good" or "bad") + a one-line reason.
+Make roughly half concise/faithful ("good") and half verbose or inaccurate ("bad").
+Include a few tricky cases: summaries that are short but drop a key deadline,
+and summaries that are accurate but bury the most important item.
+Return it as a markdown table.
 
-## Your definition of good vs bad (golden-set criteria) — the graded part, write your own
+## Your definition of good vs bad (golden-set criteria), the graded part, write your own
 
-_What makes a summary genuinely good or bad for THIS product? This is the judgment call that's yours — don't copy the example._
+Good: every number, date, and owner matches the email exactly. Nothing added, no spin. All action items and deadlines survive. Risks and blockers are stated plainly, not buried behind wins. Readable in under 15 seconds.
+
+Bad: fails any of the first three (hard fails), or is padded enough that the reader has to hunt for the point.
+
+Edge cases: short but drops a deadline = bad. Accurate but buries the blocker = bad for a CEO. Rounded numbers only OK if the source is also approximate.
+
+Changes to the LLM's labels: flipped row 8 to bad (dropped the "confirm address, then ship" action item). Dropped row 20 (duplicate of row 6). Added 3 rows for subtle failures the generated set missed: a summary that softens churn going 3% to 5% into "ticked up slightly," a clean version of the same summary, and one that rounds 23.6% to "roughly 25%."
 
 ## Screenshots, links or repo paths (optional if you followed the demo)
 
-_2 shots: (1) eval setup (dataset + judge), (2) starter rows. Image links, or paths under `01-evaluation-strategy/screenshots/`._
+01-evaluation-strategy/screenshots/eval-setup.png
+01-evaluation-strategy/screenshots/starter-rows.png
+
